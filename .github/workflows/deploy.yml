@@ -1,0 +1,32 @@
+name Deploy to GitHub Pages
+
+on
+  push
+    branches
+      - main  # Замените на вашу основную ветку, если она называется иначе
+
+jobs
+  deploy
+    runs-on ubuntu-latest
+    steps
+      - name Checkout code
+        uses actionscheckout@v2
+
+      - name Set up Python
+        uses actionssetup-python@v2
+        with
+          python-version '3.x'  # Замените на вашу версию Python
+
+      - name Install MkDocs
+        run 
+          pip install mkdocs
+
+      - name Build MkDocs
+        run 
+          mkdocs build
+
+      - name Deploy to GitHub Pages
+        uses peaceirisactions-gh-pages@v3
+        with
+          github_token ${{ secrets.GITHUB_TOKEN }}
+          publish_dir .site
